@@ -161,7 +161,6 @@ public class PlayerController : MonoBehaviour {
     {
         rotationSpeed = SliderSpeed.value;
     }
-  
 
     void FixedUpdate()
     {

@@ -1115,6 +1115,10 @@ Prefab:
       propertyPath: SliderSmooth
       value: 
       objectReference: {fileID: 176607733}
+    - target: {fileID: 1104074067377578, guid: a876e2d2a4a34294ba189991b6265b5d, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114042181794058590, guid: a876e2d2a4a34294ba189991b6265b5d, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: a876e2d2a4a34294ba189991b6265b5d, type: 2}
