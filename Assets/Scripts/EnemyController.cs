@@ -1,0 +1,108 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Random = UnityEngine.Random;
+
+public class EnemyController : Enemy
+{
+    private bool _canMove;
+    public Transform CarSpawnTransform;
+    public GameObject CarPrefab;
+    public int CountCar = 2;
+    public float TimeSpawnCar = 4;
+    private GameObject[] _carTargets;
+    public GameObject Gun1, Gun2;
+
+
+    void Start()
+    {
+        //Health = 100;
+        //Damage = 5;
+        //Speed = Random.Range(20, 40);
+        _carTargets = GameObject.FindGameObjectsWithTag(Tags.SpawnTag);
+        Camera = UnityEngine.Camera.main.gameObject;
+    }
+
+
+    void Update()
+    {
+        if (_canMove)
+        {
+            if (transform.position == Target.position)
+            {
+                GetComponent<Animator>().SetTrigger(Tags.StopeMoveTrigger);
+                _canMove = false;
+                StartCoroutine(SpawnEnemyCar());
+            }
+            transform.position = Vector3.MoveTowards(transform.position, Target.position, Speed*Time.deltaTime);
+        }
+        if (CanFire)
+        {
+            StartCoroutine(Fire());
+        }
+
+        Gun1.transform.LookAt(Camera.transform.position);
+        Gun2.transform.LookAt(Camera.transform.position);
+    }
+
+    public void MoveTo(Transform target)
+    {
+        Target = target;
+        _canMove = true;
+        var dir = (Target.position - transform.position).normalized;
+        transform.rotation = Quaternion.LookRotation(dir);
+    }
+
+    public void Destroyed()
+    {
+        GetComponent<Animator>().SetTrigger(Tags.DestroyTrigger);
+        Destroy(transform.gameObject, 5f);
+    }
+
+    IEnumerator SpawnEnemyCar()
+    {
+        while (CountCar > 0)
+        {
+            var car = Instantiate(CarPrefab, CarSpawnTransform.position, Quaternion.identity);
+            car.GetComponent<CarController>().Target = _carTargets[Random.Range(0, _carTargets.Length - 1)].transform;
+            car.GetComponent<CarController>().StartMove();
+            yield return new WaitForSeconds(TimeSpawnCar);
+            CountCar--;
+        }
+    }
+
+    IEnumerator Fire()
+    {
+        CanFire = false;
+        for (int i = 0; i < 5; i++)
+        {
+
+            SpawnBullet1.gameObject.SetActive(true);
+            GameObject bullet = Instantiate(BulletPrefab, SpawnBullet1.position, SpawnBullet1.rotation);
+            bullet.GetComponent<BulletCarColliderControll>().SetDamage(Damage);
+            bullet.transform.localScale /= 3f;
+            bullet.GetComponent<Rigidbody>().velocity = bullet.transform.up*300;
+
+            yield return new WaitForSeconds(0.13f);
+            SpawnBullet1.gameObject.SetActive(false);
+            Destroy(bullet, 8);
+        }
+        yield return new WaitForSeconds(3f);
+        for (int i = 0; i < 5; i++)
+        {
+          
+            SpawnBullet2.gameObject.SetActive(true);
+            GameObject bullet2 = Instantiate(BulletPrefab, SpawnBullet2.position, SpawnBullet2.rotation);
+            bullet2.GetComponent<BulletCarColliderControll>().SetDamage(Damage);
+            bullet2.transform.localScale /= 3f;
+            bullet2.GetComponent<Rigidbody>().velocity = bullet2.transform.up*300;
+            yield return new WaitForSeconds(0.13f);
+            SpawnBullet2.gameObject.SetActive(false);
+            Destroy(bullet2, 8);
+         
+        }
+        yield return new WaitForSeconds(3f);
+        CanFire = true;
+    }
+}
