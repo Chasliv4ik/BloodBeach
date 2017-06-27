@@ -19,6 +19,7 @@ public class Gun : MonoBehaviour
     public GameObject Trunk,Camera;
     [SerializeField]
     public GunsType Guns;
+    public GunsType.TypeGun GunType;
     public GameObject  BulletPrefab;
     public Transform BulletSpawnTransform,MainCameraTransform,TargetTransform;
     public float BulletSpeed = 400;
@@ -30,12 +31,7 @@ public class Gun : MonoBehaviour
 
     private void Start()
     {
-       
-    //    Guns = new GunsType(Guns.Type);
-        var strJson = Resources.Load<TextAsset>("GunsType").text;
-       Guns = GunsType.CreateGunFromJson(strJson);
-       // Trunk.GetComponent<Renderer>().material.color = Guns.GunColor;
-     
+      Guns = new GunsType(LoadDataManager.Data.Guns.FirstOrDefault(x=>x.TypeGunn == GunType.ToString()));
     }
   
 

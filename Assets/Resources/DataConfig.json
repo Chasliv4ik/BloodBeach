@@ -12,7 +12,6 @@
       "Health": 100,
       "Speed": 30,
       "Damage": 5
-//"DamageFinish": 10
     }
 
   ],
@@ -49,8 +48,6 @@
       "ReloadTime": 5,
       "TypeGunn": "GunPTRK"
     }
-  
-
   ]
 
 }

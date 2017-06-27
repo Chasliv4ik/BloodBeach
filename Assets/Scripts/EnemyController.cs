@@ -17,6 +17,11 @@ public class EnemyController : Enemy
 
     void Start()
     {
+        var shipInfo = LoadDataManager.Data.Enemys[1];
+        Health = shipInfo.Health;
+        Damage = shipInfo.Damage;
+        Speed = shipInfo.Speed;
+
         //Health = 100;
         //Damage = 5;
         //Speed = Random.Range(20, 40);
