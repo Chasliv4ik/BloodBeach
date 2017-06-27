@@ -597,8 +597,8 @@ PlayerSettings:
   cloudServicesEnabled: {}
   facebookSdkVersion: 7.9.1
   apiCompatibilityLevel: 2
-  cloudProjectId: 
-  projectName: 
-  organizationId: 
+  cloudProjectId: c9844360-3e86-44db-a33f-de213a14a47b
+  projectName: Blood Beach
+  organizationId: bidontech
   cloudEnabled: 0
   enableNewInputSystem: 0

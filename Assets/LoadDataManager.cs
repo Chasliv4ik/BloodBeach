@@ -30,7 +30,7 @@ public class LoadDataManager : MonoBehaviour
             return JsonUtility.FromJson<DataContainer>(json);
         }
     }
-
+ 
     
  
     public static DataContainer Data;
