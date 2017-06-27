@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using NUnit.Compatibility;
 using UnityEngine;
 
 [Serializable]
@@ -23,56 +18,64 @@ public class GunsType
     public float ReloadTime;
     public int DamageBoat;
     public int DamageCar;  
-    public TypeGun TypeGunn;
+    public string TypeGunn;
    // public Color GunColor;
 
     private readonly int _reloadSize;
 
-    //public GunsType(TypeGun e)
-    //{
-    //    switch (e)
-    //    {
-    //        case TypeGun.GunDShK:
+    public GunsType(GunsType gun)
+    {
 
-    //            MagazinSize = 0; //infinity
-    //            DamageBoat = 5;
-    //            DamageCar = 0;
-    //            ReloadSize = 0;
-    //            ReloadTime = 0;
-    //            GunColor = Color.blue;
-    //            break;
-    //        case TypeGun.GunZu:
-    //            MagazinSize = 100000;
-    //            ReloadSize = 10;
-    //            ReloadTime = 1.5f;
-    //            DamageBoat = 15;
-    //            DamageCar = 5;
-    //            GunColor = Color.gray;
-    //            break;
-    //        case TypeGun.GunRPG:
-    //            MagazinSize = 100;
-    //            ReloadSize = 3;
-    //            ReloadTime = 3f;
-    //            DamageCar = 100;
-    //            DamageBoat = 80;
-    //            GunColor = Color.red;
-    //            break;
-    //        case TypeGun.GunPTRK:
-    //            MagazinSize = 50;
-    //            ReloadSize = 2;
-    //            ReloadTime = 5;
-    //            DamageBoat = 100;
-    //            DamageCar = 100;
-    //            GunColor = Color.cyan;
-    //            break;
-    //    }
-    //    Type = e;
-    //    _reloadSize = ReloadSize;
-    //}
+        DamageBoat = gun.DamageBoat;
+        DamageCar = gun.DamageCar;
+        MagazinSize = gun.MagazinSize;
+        ReloadSize = gun.ReloadSize;
+        TypeGunn = gun.TypeGunn;
+        ReloadTime = gun.ReloadTime;
+        _reloadSize = ReloadSize;
+
+        //switch (e)
+        //{
+        //    case TypeGun.GunDShK:
+
+        //        MagazinSize = 0; //infinity
+        //        DamageBoat = 5;
+        //        DamageCar = 0;
+        //        ReloadSize = 0;
+        //        ReloadTime = 0;
+        //       this.                break;
+        //    case TypeGun.GunZu:
+        //        MagazinSize = 100000;
+        //        ReloadSize = 10;
+        //        ReloadTime = 1.5f;
+        //        DamageBoat = 15;
+        //        DamageCar = 5;
+
+        //        break;
+        //    case TypeGun.GunRPG:
+        //        MagazinSize = 100;
+        //        ReloadSize = 3;
+        //        ReloadTime = 3f;
+        //        DamageCar = 100;
+        //        DamageBoat = 80;
+
+        //        break;
+        //    case TypeGun.GunPTRK:
+        //        MagazinSize = 50;
+        //        ReloadSize = 2;
+        //        ReloadTime = 5;
+        //        DamageBoat = 100;
+        //        DamageCar = 100;
+
+        //        break;
+        //}
+
+
+    }
 
     public bool IsShooting()
     {
-        if (TypeGunn != TypeGun.GunDShK)
+        if (TypeGunn != "GunDShK")
         {
             ReloadSize--;
             if (ReloadSize < 0)

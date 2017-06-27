@@ -19,9 +19,11 @@ public class CarController : Enemy
 
     void Awake()
     {
-        Health = 60;
-        Damage = 5;
-        DamageFinish = 10;
+        var carInfo = LoadDataManager.Data.Enemys[0];
+        Health = carInfo.Health;
+        Damage = carInfo.Damage;
+        DamageFinish = carInfo.DamageFinish;
+        Speed = carInfo.Speed;
         _navMeshAgent = GetComponent<NavMeshAgent>();
         Camera = UnityEngine.Camera.main.gameObject;
     }
