@@ -209,7 +209,7 @@ public class PlayerController : MonoBehaviour {
     #endregion
     public void Fire()
     {
-        if (Gun.Guns.MagazinSize > 0 || Gun.Guns.TypeGunn == GunsType.TypeGun.GunDShK)
+        if (Gun.Guns.MagazinSize > 0 || Gun.Guns.TypeGunn == "GunDShK")
         {
             if (isFire && Gun.Guns.IsShooting())
             {
@@ -268,7 +268,7 @@ public class PlayerController : MonoBehaviour {
         Camera.main.transform.SetParent(transform);
         Quaternion tmpCamera = Gun.Camera.transform.rotation;
         Gun.gameObject.SetActive(false);      
-        Gun = Guns.FirstOrDefault(x=>x.Guns.TypeGunn == (GunsType.TypeGun) type);
+        Gun = Guns.FirstOrDefault(x=>x.Guns.TypeGunn == ((GunsType.TypeGun) type).ToString());
         Gun.Camera.transform.rotation = tmpCamera;
         Gun.gameObject.SetActive(true);
         Camera.main.transform.position = Gun.MainCameraTransform.position;
