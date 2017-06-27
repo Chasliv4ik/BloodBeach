@@ -2,11 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class MenuController : MonoBehaviour {
+public class MenuController : MonoBehaviour
+{
+    public static MenuController Instance;
 
-	public void LoadScene(int scene)
+    [SerializeField] public Button ButtonHost;
+    [SerializeField] public Button ButtonJoin;
+
+    private void Start()
     {
-        SceneManager.LoadScene(scene);
+        Instance = this;
+        NetworkManagerCustom.Instance.SetupMainMenuButtons(ButtonHost, ButtonJoin);
     }
+
+	public void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
+
 }
