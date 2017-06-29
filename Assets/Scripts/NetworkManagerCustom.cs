@@ -25,7 +25,6 @@ public class NetworkManagerCustom : NetworkManager {
         public Transform PlayerTransform;
         public bool IsReady;
 
-
         public PlayerInfo(NetworkConnection connection, string name, PlayerState state, Transform playerTransform, bool isReady)
         {
             Connection = connection;
@@ -34,7 +33,6 @@ public class NetworkManagerCustom : NetworkManager {
             PlayerTransform = playerTransform;
             IsReady = isReady;
         }
-
     }
 
     public static NetworkManagerCustom Instance;
@@ -50,12 +48,11 @@ public class NetworkManagerCustom : NetworkManager {
     //On Button Create Host
     public void StartupHost()
     {
-        //singleton.StartMatchMaker();
         GameCode = Random.Range(1000000, 10000000);
+        //matchName = GameCode.ToString();
+
         singleton.StartMatchMaker();
         singleton.matchMaker.ListMatches(0, 20, GameCode.ToString(), false, 0, 1, OnCreateMatchList);
-
-       
     }
 
     public virtual void OnCreateMatchList(bool success, string extendedInfo, List<MatchInfoSnapshot> responseData)
@@ -64,24 +61,24 @@ public class NetworkManagerCustom : NetworkManager {
         {
             if (responseData.Count != 0) //Checking if there is any matches with generated name
             {
-                //Match exists
+                MenuController.Instance.SetStatus("Match Exists");
             }
             else
             {
-                //Match doesn't exists, creating it
+                MenuController.Instance.SetStatus("Match doesn't exists. Creating");
                 singleton.matchMaker.CreateMatch(GameCode.ToString(), 2, true, "", "", "", 0, 1, OnMatchCreate);
             }
         }
         else
         {
-            //Error while searching for match
+            MenuController.Instance.SetStatus("Create match Error");
         }
     }
 
     public void JoinGame()
     {
         singleton.StartMatchMaker();
-        singleton.matchMaker.ListMatches(0, 20, matchName, false, 0, 1, OnJoinMatchList);
+        singleton.matchMaker.ListMatches(0, 20, "", false, 0, 1, OnJoinMatchList);
         SetMatchNamePort();
     }
 
@@ -89,19 +86,19 @@ public class NetworkManagerCustom : NetworkManager {
     {
         if (success)
         {
-            if (responsedata.Count > 0)
+            if (responsedata.Count != 0)
             {
-                //Match found. Connecting
+                MenuController.Instance.SetStatus("Create match Error");
                 singleton.matchMaker.JoinMatch(responsedata[0].networkId, "", "", "", 0, 1, OnMatchJoined);
             }
             else
             {
-                //Match not found
+                MenuController.Instance.SetStatus("Create match Error");
             }
         }
         else
         {
-            //Error while searching for match
+            MenuController.Instance.SetStatus("Create match Error");
         }
     }
 
@@ -121,4 +118,11 @@ public class NetworkManagerCustom : NetworkManager {
         join.onClick.AddListener(JoinGame);
     }
 
+    public void ResetConnections()
+    {
+        singleton.StopMatchMaker();
+        singleton.StopHost();
+        singleton.StopClient();
+        NetworkServer.Reset();
+    }
 }

@@ -10,6 +10,7 @@ public class MenuController : MonoBehaviour
 
     [SerializeField] public Button ButtonHost;
     [SerializeField] public Button ButtonJoin;
+    [SerializeField] public Text MultiplayerStatus;
 
     private void Start()
     {
@@ -22,5 +23,9 @@ public class MenuController : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
 
-
+    public void SetStatus(string statusMessage)
+    {
+        MultiplayerStatus.text = statusMessage;
+        Debug.Log(statusMessage);
+    }
 }
