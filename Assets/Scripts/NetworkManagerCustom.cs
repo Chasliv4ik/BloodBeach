@@ -41,7 +41,7 @@ public class NetworkManagerCustom : NetworkManager {
     public List<PlayerInfo> PlayerInfos;
     public int GameCode;
 
-    private void Awake()
+    private void Start()
     {
         Instance = this;
         PlayerInfos = new List<PlayerInfo>();
