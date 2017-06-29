@@ -1510,8 +1510,8 @@ MonoBehaviour:
     ReloadTime: 0
     DamageBoat: 0
     DamageCar: 0
-    Type: 0
-    GunColor: {r: 0, g: 0, b: 0, a: 0}
+    TypeGunn: 
+  GunType: 0
   BulletPrefab: {fileID: 1119547921723580, guid: 9454279f9f3eeb74fa4a280c6e9364dc,
     type: 2}
   BulletSpawnTransform: {fileID: 4390815958910912}
@@ -1550,7 +1550,7 @@ MonoBehaviour:
     i14: 91
     i15: 93
   m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  m_LocalPlayerAuthority: 1
 --- !u!114 &114259058303026378
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1600,8 +1600,8 @@ MonoBehaviour:
     ReloadTime: 0
     DamageBoat: 0
     DamageCar: 0
-    Type: 3
-    GunColor: {r: 0, g: 0, b: 0, a: 0}
+    TypeGunn: 
+  GunType: 0
   BulletPrefab: {fileID: 1119547921723580, guid: 9454279f9f3eeb74fa4a280c6e9364dc,
     type: 2}
   BulletSpawnTransform: {fileID: 4683190726984552}

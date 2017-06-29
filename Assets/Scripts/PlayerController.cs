@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : NetworkBehaviour {
 
     #region public variables
 
@@ -42,8 +43,6 @@ public class PlayerController : MonoBehaviour {
 
     private void Start()
     {
-
-     
         _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
    //     MagazinData.Add(Gun.Guns.Type, Gun.Guns.MagazinSize);
       //  Guns = FindObjectsOfType<Gun>();
@@ -161,7 +160,6 @@ public class PlayerController : MonoBehaviour {
     {
         rotationSpeed = SliderSpeed.value;
     }
-  
 
     void FixedUpdate()
     {
@@ -292,7 +290,7 @@ public class PlayerController : MonoBehaviour {
                     EC.Health / 100f;
                 if (EC.Health <= 0)
                 {
-                    Handheld.Vibrate();
+                    //Handheld.Vibrate();
                     EC.Destroyed();
                     _gameController.TargetTransform.FirstOrDefault(x => x.transform == EC.Target).IsEmpty = true;
                     _gameController.InstantiateShip();
@@ -311,7 +309,7 @@ public class PlayerController : MonoBehaviour {
                     CC.Health / 60f;
                 if (CC.Health <= 0)
                 {
-                    Handheld.Vibrate();
+                    //Handheld.Vibrate();
                     Destroy(CC.transform.gameObject);
                     _gameController.HeathSlider.SetActive(false);
                     hit.collider.enabled = false;
