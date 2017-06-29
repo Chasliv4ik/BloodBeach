@@ -25,7 +25,7 @@ public class CarController : Enemy
         DamageFinish = carInfo.DamageFinish;
         Speed = carInfo.Speed;
         _navMeshAgent = GetComponent<NavMeshAgent>();
-        Camera = UnityEngine.Camera.main.gameObject;
+        TargetPlayer = UnityEngine.Camera.main.gameObject;
     }
 
     void Start()
@@ -47,7 +47,7 @@ public class CarController : Enemy
         {
             StartCoroutine(Fire());
         }
-        Gun.transform.LookAt(Camera.transform.position);
+        Gun.transform.LookAt(TargetPlayer.transform.position);
         //   Data = _navMeshAgent.nextPosition.normalized;
         // transform.LookAt(Data);
     }
@@ -77,6 +77,6 @@ public class CarController : Enemy
 
     public void StartMove()
     {
-        _navMeshAgent.SetDestination(Target.position);
+        _navMeshAgent.SetDestination(TargetPosition.position);
     }
 }

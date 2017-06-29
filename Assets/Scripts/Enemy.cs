@@ -12,15 +12,10 @@ public class Enemy : MonoBehaviour
     public float DamageFinish;
     public int Health;
 
-    public Transform Target;
-
+    public Transform TargetPosition;
     public GameObject BulletPrefab;
-
     public Transform SpawnBullet1;
-
     public Transform SpawnBullet2;
-
     public bool CanFire = true;
-
-    public GameObject Camera;
+    public GameObject TargetPlayer;
 }

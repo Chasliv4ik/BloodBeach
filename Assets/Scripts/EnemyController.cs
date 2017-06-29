@@ -26,7 +26,7 @@ public class EnemyController : Enemy
         //Damage = 5;
         //Speed = Random.Range(20, 40);
         _carTargets = GameObject.FindGameObjectsWithTag(Tags.SpawnTag);
-        Camera = UnityEngine.Camera.main.gameObject;
+        TargetPlayer = UnityEngine.Camera.main.gameObject;
     }
 
 
@@ -34,28 +34,28 @@ public class EnemyController : Enemy
     {
         if (_canMove)
         {
-            if (transform.position == Target.position)
+            if (transform.position == TargetPosition.position)
             {
                 GetComponent<Animator>().SetTrigger(Tags.StopeMoveTrigger);
                 _canMove = false;
                 StartCoroutine(SpawnEnemyCar());
             }
-            transform.position = Vector3.MoveTowards(transform.position, Target.position, Speed*Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, TargetPosition.position, Speed*Time.deltaTime);
         }
         if (CanFire)
         {
             StartCoroutine(Fire());
         }
 
-        Gun1.transform.LookAt(Camera.transform.position);
-        Gun2.transform.LookAt(Camera.transform.position);
+        Gun1.transform.LookAt(TargetPlayer.transform.position);
+        Gun2.transform.LookAt(TargetPlayer.transform.position);
     }
 
     public void MoveTo(Transform target)
     {
-        Target = target;
+        TargetPosition = target;
         _canMove = true;
-        var dir = (Target.position - transform.position).normalized;
+        var dir = (TargetPosition.position - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(dir);
     }
 
@@ -70,7 +70,7 @@ public class EnemyController : Enemy
         while (CountCar > 0)
         {
             var car = Instantiate(CarPrefab, CarSpawnTransform.position, Quaternion.identity);
-            car.GetComponent<CarController>().Target = _carTargets[Random.Range(0, _carTargets.Length - 1)].transform;
+            car.GetComponent<CarController>().TargetPosition = _carTargets[Random.Range(0, _carTargets.Length - 1)].transform;
             car.GetComponent<CarController>().StartMove();
             yield return new WaitForSeconds(TimeSpawnCar);
             CountCar--;
