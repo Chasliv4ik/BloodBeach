@@ -34,6 +34,7 @@ namespace UnityStandardAssets.Cameras
         {
             base.Start();
             m_OriginalRotation = transform.localRotation;
+            m_Target = GameObject.Find("TargetRotator").transform;
         }
 
 

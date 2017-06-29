@@ -23,8 +23,8 @@ namespace UnityStandardAssets.Water
         public LayerMask refractLayers = -1;
 
 
-        private Dictionary<Camera, Camera> m_ReflectionCameras = new Dictionary<Camera, Camera>(); // Camera -> Camera table
-        private Dictionary<Camera, Camera> m_RefractionCameras = new Dictionary<Camera, Camera>(); // Camera -> Camera table
+        private Dictionary<Camera, Camera> m_ReflectionCameras = new Dictionary<Camera, Camera>(); // TargetPlayer -> TargetPlayer table
+        private Dictionary<Camera, Camera> m_RefractionCameras = new Dictionary<Camera, Camera>(); // TargetPlayer -> TargetPlayer table
         private RenderTexture m_ReflectionTexture;
         private RenderTexture m_RefractionTexture;
         private WaterMode m_HardwareWaterSupport = WaterMode.Refractive;
@@ -282,11 +282,11 @@ namespace UnityStandardAssets.Water
                     m_OldReflectionTextureSize = textureSize;
                 }
 
-                // Camera for reflection
+                // TargetPlayer for reflection
                 m_ReflectionCameras.TryGetValue(currentCamera, out reflectionCamera);
                 if (!reflectionCamera) // catch both not-in-dictionary and in-dictionary-but-deleted-GO
                 {
-                    GameObject go = new GameObject("Water Refl Camera id" + GetInstanceID() + " for " + currentCamera.GetInstanceID(), typeof(Camera), typeof(Skybox));
+                    GameObject go = new GameObject("Water Refl TargetPlayer id" + GetInstanceID() + " for " + currentCamera.GetInstanceID(), typeof(Camera), typeof(Skybox));
                     reflectionCamera = go.GetComponent<Camera>();
                     reflectionCamera.enabled = false;
                     reflectionCamera.transform.position = transform.position;
@@ -313,12 +313,12 @@ namespace UnityStandardAssets.Water
                     m_OldRefractionTextureSize = textureSize;
                 }
 
-                // Camera for refraction
+                // TargetPlayer for refraction
                 m_RefractionCameras.TryGetValue(currentCamera, out refractionCamera);
                 if (!refractionCamera) // catch both not-in-dictionary and in-dictionary-but-deleted-GO
                 {
                     GameObject go =
-                        new GameObject("Water Refr Camera id" + GetInstanceID() + " for " + currentCamera.GetInstanceID(),
+                        new GameObject("Water Refr TargetPlayer id" + GetInstanceID() + " for " + currentCamera.GetInstanceID(),
                             typeof(Camera), typeof(Skybox));
                     refractionCamera = go.GetComponent<Camera>();
                     refractionCamera.enabled = false;

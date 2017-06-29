@@ -35,7 +35,7 @@ public class BulletColliderControl : MonoBehaviour
             if (EC.Health <= 0)
             {
                 EC.Destroyed();
-                GC.TargetTransform.FirstOrDefault(x => x.transform == EC.Target).IsEmpty = true;
+                GC.TargetTransform.FirstOrDefault(x => x.transform == EC.TargetPosition).IsEmpty = true;
                 GC.InstantiateShip();
                 GC.HeathSlider.SetActive(false);              
                 collider.enabled = false;
