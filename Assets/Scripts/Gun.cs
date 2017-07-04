@@ -24,6 +24,7 @@ public class Gun : MonoBehaviour
     public Transform BulletSpawnTransform,MainCameraTransform,TargetTransform;
     public float BulletSpeed = 400;
     public LookatTarget LookAt;
+    public Transform MovingPart;
 
     #endregion
 
@@ -31,7 +32,7 @@ public class Gun : MonoBehaviour
 
     private void Start()
     {
-      Guns = new GunsType(LoadDataManager.Data.Guns.FirstOrDefault(x=>x.TypeGunn == GunType.ToString()));
+     
     }
   
 

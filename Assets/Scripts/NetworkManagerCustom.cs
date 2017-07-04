@@ -71,7 +71,7 @@ public class NetworkManagerCustom : NetworkManager {
         }
         else
         {
-            MenuController.Instance.SetStatus("Create match Error");
+            MenuController.Instance.SetStatus("Create match error");
         }
     }
 
@@ -88,17 +88,17 @@ public class NetworkManagerCustom : NetworkManager {
         {
             if (responsedata.Count != 0)
             {
-                MenuController.Instance.SetStatus("Create match Error");
+                MenuController.Instance.SetStatus("Joining match");
                 singleton.matchMaker.JoinMatch(responsedata[0].networkId, "", "", "", 0, 1, OnMatchJoined);
             }
             else
             {
-                MenuController.Instance.SetStatus("Create match Error");
+                MenuController.Instance.SetStatus("No matches found");
             }
         }
         else
         {
-            MenuController.Instance.SetStatus("Create match Error");
+            MenuController.Instance.SetStatus("Join match error");
         }
     }
 
