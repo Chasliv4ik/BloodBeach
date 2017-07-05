@@ -23,15 +23,15 @@ public class GunsType
 
     private readonly int _reloadSize;
 
-    public GunsType(GunsType gun)
+    public GunsType(GunsType gunsType)
     {
 
-        DamageBoat = gun.DamageBoat;
-        DamageCar = gun.DamageCar;
-        MagazinSize = gun.MagazinSize;
-        ReloadSize = gun.ReloadSize;
-        TypeGunn = gun.TypeGunn;
-        ReloadTime = gun.ReloadTime;
+        DamageBoat = gunsType.DamageBoat;
+        DamageCar = gunsType.DamageCar;
+        MagazinSize = gunsType.MagazinSize;
+        ReloadSize = gunsType.ReloadSize;
+        TypeGunn = gunsType.TypeGunn;
+        ReloadTime = gunsType.ReloadTime;
         _reloadSize = ReloadSize;
 
         //switch (e)

@@ -82,7 +82,6 @@ public class EnemyController : Enemy
         CanFire = false;
         for (int i = 0; i < 5; i++)
         {
-
             SpawnBullet1.gameObject.SetActive(true);
             GameObject bullet = Instantiate(BulletPrefab, SpawnBullet1.position, SpawnBullet1.rotation);
             bullet.GetComponent<BulletCarColliderControll>().SetDamage(Damage);

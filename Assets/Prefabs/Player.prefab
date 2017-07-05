@@ -1402,7 +1402,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37164de47bc618d48a424af7f61e7b5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Gun: {fileID: 114006288219925036}
+  CurrentGun: {fileID: 114006288219925036}
   Guns:
   - {fileID: 114006288219925036}
   - {fileID: 114545845980638066}
@@ -1422,6 +1422,7 @@ MonoBehaviour:
   SliderSpeed: {fileID: 0}
   SliderSmooth: {fileID: 0}
   syncPos: {x: 0, y: 0, z: 0, w: 0}
+  PlayerId: -1
 --- !u!114 &114339998071251144
 MonoBehaviour:
   m_ObjectHideFlags: 1

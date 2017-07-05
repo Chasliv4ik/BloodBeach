@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -32,28 +33,23 @@ public class NetworkSpawnController : NetworkBehaviour
 	}
 
 
-    public void SpawnObject(string objectName, float velocity)
+    public void SpawnBullet(float velocity, int playerId)
     {
-        switch (objectName)
-        {
-            case "Player Bullet":
+        PlayerController player = GameObject.FindGameObjectsWithTag("Player")
+            .ToList()
+            .Find(_pl => _pl.GetComponent<PlayerController>().connectionToServer.connectionId == playerId)
+            .GetComponent<PlayerController>();
 
-                PlayerController localPlayer = GameObject.Find("Local Player").GetComponent<PlayerController>();
+        GameObject bullet = Instantiate(_bulletPrefab, player.CurrentGun.BulletSpawnTransform.position,
+            player.CurrentGun.BulletSpawnTransform.rotation);
 
-                GameObject bullet = Instantiate(_bulletPrefab, localPlayer.Gun.BulletSpawnTransform.position,
-                    localPlayer.Gun.BulletSpawnTransform.rotation);
+        bullet.transform.localRotation = player.CurrentGun.BulletSpawnTransform.rotation;
+        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * velocity;
 
-                bullet.transform.localRotation = localPlayer.Gun.BulletSpawnTransform.rotation;
-                bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * velocity;
-
-                NetworkServer.Spawn(bullet);
-                break;
-        }
-
-
+        NetworkServer.Spawn(bullet);
     }
 
-    public void SpawnObject(ObjectKey objectKey, Vector3 pos, Quaternion rot)
+    public void SpawnBullet(ObjectKey objectKey, Vector3 pos, Quaternion rot)
     {
         GameObject objectToSpawn = Instantiate(ObjectPool[objectKey], pos, rot);
         NetworkServer.Spawn(objectToSpawn);
