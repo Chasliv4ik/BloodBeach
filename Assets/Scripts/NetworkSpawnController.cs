@@ -19,6 +19,8 @@ public class NetworkSpawnController : NetworkBehaviour
     [SerializeField] private GameObject _boatPrefab;
     [SerializeField] private GameObject _carPrefab;
 
+    [SerializeField] private GameObject _explosion;
+
     private Dictionary<ObjectKey, GameObject> ObjectPool;
 
 	void Start ()
@@ -32,12 +34,11 @@ public class NetworkSpawnController : NetworkBehaviour
         ObjectPool.Add(ObjectKey.Car, _carPrefab);
 	}
 
-
     public void SpawnBullet(float velocity, int playerId)
     {
         PlayerController player = GameObject.FindGameObjectsWithTag("Player")
             .ToList()
-            .Find(_pl => _pl.GetComponent<PlayerController>().connectionToServer.connectionId == playerId)
+            .Find(_pl => _pl.GetComponent<PlayerController>().connectionToClient.connectionId == playerId)
             .GetComponent<PlayerController>();
 
         GameObject bullet = Instantiate(_bulletPrefab, player.CurrentGun.BulletSpawnTransform.position,
@@ -49,9 +50,19 @@ public class NetworkSpawnController : NetworkBehaviour
         NetworkServer.Spawn(bullet);
     }
 
-    public void SpawnBullet(ObjectKey objectKey, Vector3 pos, Quaternion rot)
+    public void SpawnExplosion(Vector3 pos)
     {
-        GameObject objectToSpawn = Instantiate(ObjectPool[objectKey], pos, rot);
-        NetworkServer.Spawn(objectToSpawn);
+        StartCoroutine(SpawnExplosionProcess(pos));
+    }
+
+    private IEnumerator SpawnExplosionProcess(Vector3 pos)
+    {
+
+        GameObject explosion = Instantiate(_explosion, pos, Quaternion.identity);
+        NetworkServer.Spawn(explosion);
+
+        yield return new WaitForSeconds(2f);
+
+        NetworkServer.Destroy(explosion);
     }
 }

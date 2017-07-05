@@ -46,11 +46,13 @@ public class PlayerController : NetworkBehaviour {
     [SyncVar] private Quaternion syncPos;
     private float _lerpRate = 15;
     [SyncVar] public int PlayerId = -1;
+    private GameObject _shootHelper;
 
     private void Start()
     {
 
         _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        _shootHelper = GameObject.Find("Shoot Helper");
         //     MagazinData.Add(CurrentGun.Guns.Type, CurrentGun.Guns.MagazinSize);
         //  Guns = FindObjectsOfType<CurrentGun>();
         //ViewInfoAboutGun(CurrentGun.Guns);
@@ -123,10 +125,11 @@ public class PlayerController : NetworkBehaviour {
         //#if UNITY_EDITOR || UNITY_STANDALONE_WIN
                 CurrentGun.LookAt.enabled = false;
                 rotationSpeed = 50f; //2 for Android
-        //#endif
+                                     //#endif
 
         //CurrentGun.GetComponentInChildren<NetworkAnimator>().SetParameterAutoSend(0, true);
-
+        //PlayerId = connectionToServer.connectionId;
+        
     }
 
     public override void OnStartLocalPlayer()
@@ -134,7 +137,6 @@ public class PlayerController : NetworkBehaviour {
         //base.OnStartLocalPlayer();
         //Debug.Log("ID: " + connectionToServer.connectionId);
 
-        PlayerId = connectionToServer.connectionId;
 
         foreach (var gun in Guns)
         {
@@ -292,12 +294,29 @@ public class PlayerController : NetworkBehaviour {
                 //bullet.transform.localRotation = CurrentGun.BulletSpawnTransform.rotation;
                 //bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * CurrentGun.BulletSpeed;
 
-                Cmd_ShootBullet(CurrentGun.BulletSpeed, PlayerId);
+                Cmd_ShootBullet(CurrentGun.BulletSpeed, connectionToServer.connectionId);
+
+
+                _shootHelper.transform.position = CurrentGun.BulletSpawnTransform.position;
+                _shootHelper.transform.rotation = CurrentGun.BulletSpawnTransform.rotation;
+
+                    /*
+                GameObject tmp = new GameObject();
+                tmp.transform.position = CurrentGun.BulletSpawnTransform.position;
+                tmp.transform.rotation = CurrentGun.BulletSpawnTransform.rotation;
+                */
+
+                //GameObject tmp = Instantiate(new GameObject(), CurrentGun.BulletSpawnTransform.position,
+                //CurrentGun.BulletSpawnTransform.rotation);
+
+                _shootHelper.transform.localRotation = CurrentGun.BulletSpawnTransform.rotation;
+
+                //bullet.GetComponent<Rigidbody>().velocity = tmp.transform.forward * velocity;
+
 
                 RaycastHit hit;
                 //if (Physics.Raycast(bullet.transform.position, bullet.GetComponent<Rigidbody>().velocity, out hit))
-                if (Physics.Raycast(CurrentGun.BulletPrefab.transform.position,
-                    CurrentGun.BulletPrefab.transform.forward * CurrentGun.BulletSpeed, out hit))
+                if (Physics.Raycast(_shootHelper.transform.position, _shootHelper.transform.forward * CurrentGun.BulletSpeed, out hit))
                 {
                     OnFallingIntoGoal(hit);
                 }
@@ -326,7 +345,6 @@ public class PlayerController : NetworkBehaviour {
     {
         while (true)
         {
-           
             Fire();
             yield return new WaitForSeconds(0.2f);
         }
@@ -375,8 +393,6 @@ public class PlayerController : NetworkBehaviour {
     {
         GameObject expl;
 
-        Debug.Log(hit.point);
-
         switch (hit.collider.tag)
         {
             case "Enemy":
@@ -414,13 +430,18 @@ public class PlayerController : NetworkBehaviour {
                 }
                 break;
             case "Terrain":
-                expl = Instantiate(PrefabParticleTerrain, hit.point, Quaternion.identity);
-                Destroy(expl, 2);
+                Cmd_SpawnExplosion(hit.point.x, hit.point.y, hit.point.z);
+                //expl = Instantiate(PrefabParticleTerrain, hit.point, Quaternion.identity);
+                //Destroy(expl, 2);
                 break;
         }
     }
 
-
+    [Command]
+    private void Cmd_SpawnExplosion(float x, float y, float z)
+    {
+        NetworkSpawnController.Instance.SpawnExplosion(new Vector3(x, y, z));
+    }
 
     public void ViewInfoAboutGun(GunsType guns)
     {

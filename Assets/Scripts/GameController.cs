@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class GameController : MonoBehaviour
+public class GameController : NetworkBehaviour
 {
 
     public List<TargetController> TargetTransform;
@@ -78,4 +79,6 @@ public class GameController : MonoBehaviour
     }
 	// Update is called once per frame
 	
+    
+
 }

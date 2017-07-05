@@ -600,6 +600,7 @@ MonoBehaviour:
   m_OnlineScene: Game Screen
   m_SpawnPrefabs:
   - {fileID: 1119547921723580, guid: 9454279f9f3eeb74fa4a280c6e9364dc, type: 2}
+  - {fileID: 1482133173169550, guid: 5cdba997bc66d964c90ada6f69f546f4, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -835,6 +836,7 @@ MonoBehaviour:
   _boatPrefab: {fileID: 1844986561019264, guid: 38596e4558a56bc4eac81708dfd7e7aa,
     type: 2}
   _carPrefab: {fileID: 1867064021830384, guid: 374982c2fb9035c4085cb400681ad172, type: 2}
+  _explosion: {fileID: 1482133173169550, guid: 5cdba997bc66d964c90ada6f69f546f4, type: 2}
 --- !u!114 &994971856
 MonoBehaviour:
   m_ObjectHideFlags: 0
