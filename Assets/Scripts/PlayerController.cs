@@ -150,7 +150,6 @@ public class PlayerController : NetworkBehaviour {
 
         name = "Local Player";
         SetTypeGun(0);
-        //CurrentGun.GetComponentInChildren<NetworkAnimator>().SetParameterAutoSend(0, true);
 
         EventTrigger.Entry startFire = new EventTrigger.Entry();
         startFire.eventID = EventTriggerType.PointerDown;
@@ -161,6 +160,8 @@ public class PlayerController : NetworkBehaviour {
         endFire.eventID = EventTriggerType.PointerUp;
         endFire.callback.AddListener((eventData) => { OffFire(); });
         GameObject.Find("Button Fire").GetComponent<EventTrigger>().triggers.Add(endFire);
+
+        GameScreen.Instance.SetupReadyButtons();
     }
 
     public float GetZ()
@@ -284,44 +285,17 @@ public class PlayerController : NetworkBehaviour {
             if (isFire && CurrentGun.Guns.IsShooting())
             {
                 Cmd_PlayFireAnimation();
-
-                
-                //GameObject bullet = Instantiate(CurrentGun.BulletPrefab, CurrentGun.BulletSpawnTransform.position,
-                    //CurrentGun.BulletSpawnTransform.rotation);
-                
-                //NetworkSpawnController.Instance.SpawnBullet(ObjectKey.Bullet, CurrentGun.BulletSpawnTransform.position, CurrentGun.BulletSpawnTransform.rotation);
-                //NetworkSpawnController.Instance.SpawnBullet(bullet);
-                //bullet.transform.localRotation = CurrentGun.BulletSpawnTransform.rotation;
-                //bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * CurrentGun.BulletSpeed;
-
                 Cmd_ShootBullet(CurrentGun.BulletSpeed, connectionToServer.connectionId);
-
 
                 _shootHelper.transform.position = CurrentGun.BulletSpawnTransform.position;
                 _shootHelper.transform.rotation = CurrentGun.BulletSpawnTransform.rotation;
-
-                    /*
-                GameObject tmp = new GameObject();
-                tmp.transform.position = CurrentGun.BulletSpawnTransform.position;
-                tmp.transform.rotation = CurrentGun.BulletSpawnTransform.rotation;
-                */
-
-                //GameObject tmp = Instantiate(new GameObject(), CurrentGun.BulletSpawnTransform.position,
-                //CurrentGun.BulletSpawnTransform.rotation);
-
                 _shootHelper.transform.localRotation = CurrentGun.BulletSpawnTransform.rotation;
 
-                //bullet.GetComponent<Rigidbody>().velocity = tmp.transform.forward * velocity;
-
-
                 RaycastHit hit;
-                //if (Physics.Raycast(bullet.transform.position, bullet.GetComponent<Rigidbody>().velocity, out hit))
                 if (Physics.Raycast(_shootHelper.transform.position, _shootHelper.transform.forward * CurrentGun.BulletSpeed, out hit))
                 {
                     OnFallingIntoGoal(hit);
                 }
-
-                //Destroy(bullet, 1f);
             }
             else
             {
@@ -333,6 +307,8 @@ public class PlayerController : NetworkBehaviour {
 
     public void OnFire()
     {
+        if (!NetworkManagerCustom.Instance.GameIsRunning) return;
+
         StartCoroutine("HoldFire");
     }
 
@@ -366,6 +342,26 @@ public class PlayerController : NetworkBehaviour {
     private void Cmd_ShootBullet(float velocity, int playerId)
     {
         NetworkSpawnController.Instance.SpawnBullet(velocity, playerId);
+    }
+
+    [Command]
+    public void Cmd_SetPlayerReadyness(bool isReady)
+    {
+        NetworkManagerCustom.Instance.SetPlayerReadiness(connectionToClient, isReady);
+        Rpc_SendPlayerReadiness(connectionToClient.connectionId, isReady);
+    }
+
+    [ClientRpc]
+    public void Rpc_SendPlayerReadiness(int connectionId, bool isReady)
+    {
+        GameScreen.Instance.SetPlayerReadiness(connectionId, isReady);
+    }
+
+    [ClientRpc]
+    public void Rpc_StartGame()
+    {
+        if (!isLocalPlayer) return;
+        GameScreen.Instance.StartGame();
     }
 
     IEnumerator ReloadGun()

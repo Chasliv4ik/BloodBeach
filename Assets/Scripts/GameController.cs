@@ -20,7 +20,6 @@ public class GameController : NetworkBehaviour
 	    TargetTransform = new List<TargetController>(FindObjectsOfType<TargetController>());
 	    StartCoroutine(InstantiateShip(MaxCountShip));
 	}
-   
 
     void Update()
     {
@@ -31,7 +30,6 @@ public class GameController : NetworkBehaviour
             PausePanel.SetActive(true);
             Time.timeScale = 0;
         }
-
     }
 
     public void SetOk()
@@ -56,7 +54,6 @@ public class GameController : NetworkBehaviour
              countship--;
             yield return new WaitForSeconds(AfterTimeInstantiate);
         }
-        
     }
 
     TargetController GetTarget()
@@ -71,8 +68,8 @@ public class GameController : NetworkBehaviour
         {
             return GetTarget();
         }
-      
     }
+
     public void InstantiateShip()
     {
         StartCoroutine(InstantiateShip(1));
