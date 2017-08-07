@@ -10,6 +10,10 @@ TagManager:
   - Enemy
   - Slider
   - Car
+  - WayLine1
+  - WayLine2
+  - WayLine3
+  - Tank
   layers:
   - Default
   - TransparentFX

@@ -21,7 +21,6 @@ public class Gun : MonoBehaviour
     public Transform MovingPart;
 
     #endregion
-
  
 
     private void Start()
