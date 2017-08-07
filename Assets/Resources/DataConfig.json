@@ -3,7 +3,7 @@
     {
       "TypeEnemy": "Car",
       "Health": 60,
-      "Speed": 40,
+      "Speed": 20,
       "Damage": 5,
       "DamageFinish": 10
     },
@@ -12,7 +12,14 @@
       "Health": 100,
       "Speed": 30,
       "Damage": 5
-    }
+    },
+	{  
+	  "TypeEnemy": "Tank",
+      "Health": 100,
+      "Speed": 10,
+      "Damage": 25,
+      "DamageFinish": 15
+	}
 
   ],
   "Guns": [
@@ -20,7 +27,7 @@
       "MagazineSize": 0,
       "ReloadSize": 0,
       "DamageBoat": 10,
-      "DamageCar": 0,
+      "DamageCar": 5,
       "ReloadTime": 0,
       "TypeGunn": "GunDShK"
     },
