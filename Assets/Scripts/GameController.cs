@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class GameController : MonoBehaviour
+public class GameController : NetworkBehaviour
 {
 
     public List<TargetController> TargetTransform;
@@ -19,7 +20,6 @@ public class GameController : MonoBehaviour
 	    TargetTransform = new List<TargetController>(FindObjectsOfType<TargetController>());
 	    StartCoroutine(InstantiateShip(MaxCountShip));
 	}
-   
 
     void Update()
     {
@@ -30,7 +30,6 @@ public class GameController : MonoBehaviour
             PausePanel.SetActive(true);
             Time.timeScale = 0;
         }
-
     }
 
     public void SetOk()
@@ -55,7 +54,6 @@ public class GameController : MonoBehaviour
              countship--;
             yield return new WaitForSeconds(AfterTimeInstantiate);
         }
-        
     }
 
     TargetController GetTarget()
@@ -70,12 +68,14 @@ public class GameController : MonoBehaviour
         {
             return GetTarget();
         }
-      
     }
+
     public void InstantiateShip()
     {
         StartCoroutine(InstantiateShip(1));
     }
 	// Update is called once per frame
 	
+    
+
 }

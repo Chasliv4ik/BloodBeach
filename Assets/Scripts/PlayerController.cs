@@ -6,12 +6,13 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using UnityStandardAssets.Cameras;
 
 public class PlayerController : NetworkBehaviour {
 
     #region public variables
 
-    public Gun Gun;
+    public Gun CurrentGun;
     public List<Gun> Guns;
     [SerializeField]
     public float  MyAngle, AngleHRange;
@@ -36,26 +37,30 @@ public class PlayerController : NetworkBehaviour {
     private bool isFire = true;
     private float tmpAngle;
     private GameController _gameController;
+
     [SerializeField]
-  //  private Dictionary<GunsType.TypeGun, int> MagazinData = new Dictionary<GunsType.TypeGun, int>();
+    //  private Dictionary<GunsType.TypeGun, int> MagazinData = new Dictionary<GunsType.TypeGun, int>();
 
     #endregion
+
+    [SyncVar] private Quaternion syncPos;
+    private float _lerpRate = 15;
+    [SyncVar] public int PlayerId = -1;
+    private GameObject _shootHelper;
 
     private void Start()
     {
 
         _gameController = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
-        //     MagazinData.Add(Gun.Guns.Type, Gun.Guns.MagazinSize);
-        //  Guns = FindObjectsOfType<Gun>();
-        //ViewInfoAboutGun(Gun.Guns);
-#if UNITY_EDITOR || UNITY_STANDALONE_WIN
-        Gun.LookAt.enabled = false;
-        rotationSpeed = 50f;
-#endif
+        _shootHelper = GameObject.Find("Shoot Helper");
+        //     MagazinData.Add(CurrentGun.Guns.Type, CurrentGun.Guns.MagazinSize);
+        //  Guns = FindObjectsOfType<CurrentGun>();
+        //ViewInfoAboutGun(CurrentGun.Guns);
     }
 
     void Update()
     {
+        if (!isLocalPlayer) return;
 
 #if UNITY_EDITOR || UNITY_STANDALONE_WIN
         if (Input.GetMouseButtonDown(0))
@@ -83,23 +88,80 @@ public class PlayerController : NetworkBehaviour {
                 TargetTransform.position = new Vector3(Mathf.Clamp(TargetTransform.position.x + (del.x * rotationSpeed), -90, 480),
                     Mathf.Clamp(TargetTransform.position.y + (del.y * rotationSpeed), -80, 160), GetZ());
             }
-
-
         }
 #endif
     }
+    
+    private void FixedUpdate()
+    {
+        //Cmd_SendPositionToServer(transform.position);
 
+        if (isLocalPlayer)
+        {
+            SendPosition(CurrentGun.MovingPart.localRotation);
+        }
+
+        if (!isLocalPlayer) //Lerping if not local player
+        {
+            CurrentGun.MovingPart.localRotation = Quaternion.Lerp(CurrentGun.MovingPart.localRotation, syncPos, Time.deltaTime * _lerpRate);
+            //CurrentGun.MovingPart.localRotation = Quaternion.Euler(Vector3.Lerp(CurrentGun.MovingPart.eulerAngles, syncPos, Time.deltaTime * _lerpRate));
+        }
+    }
+
+    [Command]
+    void Cmd_SendPositionToServer(Quaternion pos)
+    {
+        syncPos = pos;
+    }
+
+    [ClientCallback]
+    private void SendPosition(Quaternion pos)
+    {
+        Cmd_SendPositionToServer(pos);
+    }
+
+    public override void OnStartClient()
+    {
+        //#if UNITY_EDITOR || UNITY_STANDALONE_WIN
+                CurrentGun.LookAt.enabled = false;
+                rotationSpeed = 50f; //2 for Android
+                                     //#endif
+
+        //CurrentGun.GetComponentInChildren<NetworkAnimator>().SetParameterAutoSend(0, true);
+        //PlayerId = connectionToServer.connectionId;
+        
+    }
 
     public override void OnStartLocalPlayer()
     {
         //base.OnStartLocalPlayer();
-        //Debug.Log(transform.Find("DShK/part1/Main Camera pos"));
+        //Debug.Log("ID: " + connectionToServer.connectionId);
+
+
         foreach (var gun in Guns)
         {
           gun.Guns = new GunsType(LoadDataManager.Data.Guns.FirstOrDefault(x => x.TypeGunn == gun.GunType.ToString()));
         }
-      
+
+        #if UNITY_ANDROID && !UNITY_EDITOR
+            CurrentGun.LookAt.enabled = true;
+            transform.Find("TargetRotator").parent = null;  
+        #endif
+
+        name = "Local Player";
         SetTypeGun(0);
+
+        EventTrigger.Entry startFire = new EventTrigger.Entry();
+        startFire.eventID = EventTriggerType.PointerDown;
+        startFire.callback.AddListener((eventData) => { OnFire(); });
+        GameObject.Find("Button Fire").GetComponent<EventTrigger>().triggers.Add(startFire);
+
+        EventTrigger.Entry endFire = new EventTrigger.Entry();
+        endFire.eventID = EventTriggerType.PointerUp;
+        endFire.callback.AddListener((eventData) => { OffFire(); });
+        GameObject.Find("Button Fire").GetComponent<EventTrigger>().triggers.Add(endFire);
+
+        GameScreen.Instance.SetupReadyButtons();
     }
 
     public float GetZ()
@@ -118,12 +180,10 @@ public class PlayerController : NetworkBehaviour {
         return TargetTransform.position.z; 
     }
 
-
-
     #region OldControll
     private float CalculateAngle(Vector3 temp)
     {
-        dir = new Vector3(temp.x, temp.y, temp.z) - Gun.Camera.transform.position;
+        dir = new Vector3(temp.x, temp.y, temp.z) - CurrentGun.Camera.transform.position;
         return Vector3.Angle(dir, transform.forward);
     }
 
@@ -131,11 +191,11 @@ public class PlayerController : NetworkBehaviour {
     {
         if (CalculateAngle(target) > 0.1f)
         {
-            Gun.Camera.transform.rotation = Quaternion.RotateTowards(Gun.Camera.transform.rotation,
+            CurrentGun.Camera.transform.rotation = Quaternion.RotateTowards(CurrentGun.Camera.transform.rotation,
                 Quaternion.LookRotation(dir), rotationSpeed * Time.deltaTime);
-            var tmpy = GetRangeHorizontal(Gun.Camera.transform.localEulerAngles.y);
-            var tmpx = GetRangeVertical(Gun.Camera.transform.localEulerAngles.x);
-            Gun.Camera.transform.localEulerAngles = new Vector3(tmpx, tmpy, 0);
+            var tmpy = GetRangeHorizontal(CurrentGun.Camera.transform.localEulerAngles.y);
+            var tmpx = GetRangeVertical(CurrentGun.Camera.transform.localEulerAngles.x);
+            CurrentGun.Camera.transform.localEulerAngles = new Vector3(tmpx, tmpy, 0);
         }
     }
 
@@ -165,7 +225,7 @@ public class PlayerController : NetworkBehaviour {
 
     public void ChangeSliderSpeedSmooth()
     {
-        Gun.LookAt.m_FollowSpeed = SliderSmooth.value;
+        CurrentGun.LookAt.m_FollowSpeed = SliderSmooth.value;
     }
 
     public void ChangeSliderSpeed()
@@ -173,8 +233,8 @@ public class PlayerController : NetworkBehaviour {
         rotationSpeed = SliderSpeed.value;
     }
 
-    void FixedUpdate()
-    {
+    //void FixedUpdate()
+    //{
         //if (Input.touchCount > 0) // && Input.mousePosition.x <= Screen.width/2)
         //{
         //    if (Input.GetTouch(0).phase == TouchPhase.Began)
@@ -183,19 +243,19 @@ public class PlayerController : NetworkBehaviour {
         //    {
 
         //        MyAngle = Sensitivity * ((Input.GetTouch(0).position.x - TmpMousePos.x) / Screen.width);
-        //        Gun.TargetPlayer.transform.RotateAround(Gun.TargetPlayer.transform.position, Gun.TargetPlayer.transform.up, MyAngle);
+        //        CurrentGun.TargetPlayer.transform.RotateAround(CurrentGun.TargetPlayer.transform.position, CurrentGun.TargetPlayer.transform.up, MyAngle);
 
         //        MyAngle = Sensitivity * ((Input.GetTouch(0).position.y - TmpMousePos.y) / Screen.height);
-        //        Gun.TargetPlayer.transform.RotateAround(Gun.TargetPlayer.transform.position, Gun.TargetPlayer.transform.right, -MyAngle);
+        //        CurrentGun.TargetPlayer.transform.RotateAround(CurrentGun.TargetPlayer.transform.position, CurrentGun.TargetPlayer.transform.right, -MyAngle);
 
-        //        var tmpy = GetRangeHorizontal(Gun.TargetPlayer.transform.localEulerAngles.y);
-        //        var tmpx = GetRangeVertical(Gun.TargetPlayer.transform.localEulerAngles.x);
-        //        Gun.TargetPlayer.transform.localEulerAngles = new Vector3(tmpx,
+        //        var tmpy = GetRangeHorizontal(CurrentGun.TargetPlayer.transform.localEulerAngles.y);
+        //        var tmpx = GetRangeVertical(CurrentGun.TargetPlayer.transform.localEulerAngles.x);
+        //        CurrentGun.TargetPlayer.transform.localEulerAngles = new Vector3(tmpx,
         //        tmpy, 0);
                 
         //    }
         //}
-    }
+    //}
 
    
 
@@ -217,25 +277,25 @@ public class PlayerController : NetworkBehaviour {
         return tmp;
     }
     #endregion
+
     public void Fire()
     {
-        if (Gun.Guns.MagazinSize > 0 || Gun.Guns.TypeGunn == "GunDShK")
+        if (CurrentGun.Guns.MagazinSize > 0 || CurrentGun.Guns.TypeGunn == "GunDShK")
         {
-            if (isFire && Gun.Guns.IsShooting())
+            if (isFire && CurrentGun.Guns.IsShooting())
             {
-                //ViewInfoAboutGun(Gun.Guns);
-                Gun.GetComponent<Animation>().Play();
-                GameObject bullet = Instantiate(Gun.BulletPrefab, Gun.BulletSpawnTransform.position,
-                    Gun.BulletSpawnTransform.rotation);
-                bullet.transform.localRotation = Gun.BulletSpawnTransform.rotation;
-                bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * Gun.BulletSpeed;
+                Cmd_PlayFireAnimation();
+                Cmd_ShootBullet(CurrentGun.BulletSpeed, connectionToServer.connectionId);
+
+                _shootHelper.transform.position = CurrentGun.BulletSpawnTransform.position;
+                _shootHelper.transform.rotation = CurrentGun.BulletSpawnTransform.rotation;
+                _shootHelper.transform.localRotation = CurrentGun.BulletSpawnTransform.rotation;
 
                 RaycastHit hit;
-                if (Physics.Raycast(bullet.transform.position, bullet.GetComponent<Rigidbody>().velocity, out hit))
+                if (Physics.Raycast(_shootHelper.transform.position, _shootHelper.transform.forward * CurrentGun.BulletSpeed, out hit))
                 {
                     OnFallingIntoGoal(hit);
                 }
-                Destroy(bullet, 1f);
             }
             else
             {
@@ -247,43 +307,82 @@ public class PlayerController : NetworkBehaviour {
 
     public void OnFire()
     {
-        StartCoroutine("HoldFire");
+        if (!NetworkManagerCustom.Instance.GameIsRunning) return;
 
+        StartCoroutine("HoldFire");
     }
 
     public void OffFire()
     {
         StopCoroutine("HoldFire");
     }
+
     IEnumerator HoldFire()
     {
         while (true)
         {
-           
             Fire();
             yield return new WaitForSeconds(0.2f);
         }
     }
 
+    [Command]
+    private void Cmd_PlayFireAnimation()
+    {
+        Rpc_PlayFireAnimation();
+    }
+
+    [ClientRpc]
+    private void Rpc_PlayFireAnimation()
+    {
+        CurrentGun.GetComponentInChildren<Animator>().SetTrigger("Fire");
+    }
+
+    [Command]
+    private void Cmd_ShootBullet(float velocity, int playerId)
+    {
+        NetworkSpawnController.Instance.SpawnBullet(velocity, playerId);
+    }
+
+    [Command]
+    public void Cmd_SetPlayerReadyness(bool isReady)
+    {
+        NetworkManagerCustom.Instance.SetPlayerReadiness(connectionToClient, isReady);
+        Rpc_SendPlayerReadiness(connectionToClient.connectionId, isReady);
+    }
+
+    [ClientRpc]
+    public void Rpc_SendPlayerReadiness(int connectionId, bool isReady)
+    {
+        GameScreen.Instance.SetPlayerReadiness(connectionId, isReady);
+    }
+
+    [ClientRpc]
+    public void Rpc_StartGame()
+    {
+        if (!isLocalPlayer) return;
+        GameScreen.Instance.StartGame();
+    }
+
     IEnumerator ReloadGun()
     {
-        yield return new WaitForSeconds(Gun.Guns.ReloadTime);
-        Gun.Guns.SetDefaultReloadSize();
-        //ViewInfoAboutGun(Gun.Guns);
+        yield return new WaitForSeconds(CurrentGun.Guns.ReloadTime);
+        CurrentGun.Guns.SetDefaultReloadSize();
+        //ViewInfoAboutGun(CurrentGun.Guns);
         isFire = true;
     }
 
     public void SetTypeGun(int type)
     {
         //Camera.main.transform.SetParent(transform);
-        Quaternion tmpCamera = Gun.Camera.transform.rotation;
-        Gun.gameObject.SetActive(false); 
-        Gun = Guns.Find(gun => gun.GunType == ((GunsType.TypeGun) type));
-        Gun.Camera.transform.rotation = tmpCamera;
-        Gun.gameObject.SetActive(true);
-        Camera.main.transform.position = Gun.MainCameraTransform.position;
-        Camera.main.transform.SetParent(Gun.MainCameraTransform);
-        //ViewInfoAboutGun(Gun.Guns);
+        Quaternion tmpCamera = CurrentGun.Camera.transform.rotation;
+        CurrentGun.gameObject.SetActive(false); 
+        CurrentGun = Guns.Find(gun => gun.GunType == ((GunsType.TypeGun) type));
+        CurrentGun.Camera.transform.rotation = tmpCamera;
+        CurrentGun.gameObject.SetActive(true);
+        Camera.main.transform.position = CurrentGun.MainCameraTransform.position;
+        Camera.main.transform.SetParent(CurrentGun.MainCameraTransform);
+        //ViewInfoAboutGun(CurrentGun.Guns);
     }
 
     public void OnFallingIntoGoal(RaycastHit hit)
@@ -297,9 +396,9 @@ public class PlayerController : NetworkBehaviour {
                 Destroy(expl, 2);
                 EnemyController EC = hit.collider.transform.parent.gameObject.GetComponent<EnemyController>();
                 _gameController.HeathSlider.SetActive(true);
-                EC.Health -= Gun.Guns.DamageBoat;
-                _gameController.HeathSlider.transform.GetChild(0).GetComponent<Image>().fillAmount =
-                    EC.Health / 100f;
+                EC.Health -= CurrentGun.Guns.DamageBoat;
+                _gameController.HeathSlider.transform.GetChild(0).GetComponent<Image>().fillAmount = EC.Health / 100f;
+
                 if (EC.Health <= 0)
                 {
                     //Handheld.Vibrate();
@@ -311,14 +410,13 @@ public class PlayerController : NetworkBehaviour {
                 }
                 break;
             case "Car":
-                
                 expl = Instantiate(PrefabParticleTerrain, hit.point, Quaternion.identity);
                 Destroy(expl, 2);
                 CarController CC = hit.collider.GetComponent<CarController>();
                 _gameController.HeathSlider.SetActive(true);
-                CC.Health -= Gun.Guns.DamageCar;
-                _gameController.HeathSlider.transform.GetChild(0).GetComponent<Image>().fillAmount =
-                    CC.Health / 60f;
+                CC.Health -= CurrentGun.Guns.DamageCar;
+                _gameController.HeathSlider.transform.GetChild(0).GetComponent<Image>().fillAmount = CC.Health / 60f;
+
                 if (CC.Health <= 0)
                 {
                     //Handheld.Vibrate();
@@ -328,13 +426,18 @@ public class PlayerController : NetworkBehaviour {
                 }
                 break;
             case "Terrain":
-                expl = Instantiate(PrefabParticleTerrain, hit.point, Quaternion.identity);
-                Destroy(expl, 2);
+                Cmd_SpawnExplosion(hit.point.x, hit.point.y, hit.point.z);
+                //expl = Instantiate(PrefabParticleTerrain, hit.point, Quaternion.identity);
+                //Destroy(expl, 2);
                 break;
         }
     }
 
-
+    [Command]
+    private void Cmd_SpawnExplosion(float x, float y, float z)
+    {
+        NetworkSpawnController.Instance.SpawnExplosion(new Vector3(x, y, z));
+    }
 
     public void ViewInfoAboutGun(GunsType guns)
     {

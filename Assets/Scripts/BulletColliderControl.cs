@@ -7,13 +7,13 @@ using UnityEngine.UI;
 public class BulletColliderControl : MonoBehaviour
 {
     public GameController GC;
-    public GunsType Gun;
+    public GunsType GunsType;
     public GameObject PrefabParticleTerrain;
 
     void Start()
     {
         
-        Gun = FindObjectOfType<Gun>().Guns;
+        GunsType = FindObjectOfType<Gun>().Guns;
     }
     void OnTriggerEnter(Collider collider)
     {
@@ -29,7 +29,7 @@ public class BulletColliderControl : MonoBehaviour
             Destroy(expl, 2);
             var EC = collider.transform.parent.gameObject.GetComponent<EnemyController>();
             GC.HeathSlider.SetActive(true);      
-             EC.Health -= Gun.DamageBoat;
+             EC.Health -= GunsType.DamageBoat;
             GC.HeathSlider.transform.GetChild(0).GetComponent<Image>().fillAmount =
              EC.Health / 100f;
             if (EC.Health <= 0)
@@ -51,7 +51,7 @@ public class BulletColliderControl : MonoBehaviour
             Destroy(expl, 2);
             var EC = collider.GetComponent<CarController>();
             GC.HeathSlider.SetActive(true);
-            EC.Health -= Gun.DamageCar;
+            EC.Health -= GunsType.DamageCar;
             GC.HeathSlider.transform.GetChild(0).GetComponent<Image>().fillAmount =
              EC.Health / 60f;
             if (EC.Health <= 0)
