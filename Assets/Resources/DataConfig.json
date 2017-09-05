@@ -3,7 +3,7 @@
     {
       "TypeEnemy": "Car",
       "Health": 60,
-      "Speed": 20,
+      "Speed": 17,
       "Damage": 5,
       "DamageFinish": 10
     },
@@ -24,35 +24,39 @@
   ],
   "Guns": [
     {
-      "MagazineSize": 0,
+      "MagazinSize": 0,
       "ReloadSize": 0,
       "DamageBoat": 10,
       "DamageCar": 5,
       "ReloadTime": 0,
+      "DelayShoot": 0.2, 
       "TypeGunn": "GunDShK"
     },
     {
-      "MagazineSize": 10000,
+      "MagazinSize": 10000,
       "ReloadSize": 25,
       "DamageBoat": 15,
       "DamageCar": 5,
       "ReloadTime": 1.5,
+          "DelayShoot": 0.1,
       "TypeGunn": "GunZu"
     },
     {
-      "MagazineSize": 100,
+      "MagazinSize": 100,
       "ReloadSize": 5,
       "DamageBoat": 80,
       "DamageCar": 100,
       "ReloadTime": 3,
+      "DelayShoot": 1,
       "TypeGunn": "GunRPG"
     },
     {
-       "MagazineSize": 50,
+      "MagazinSize": 50,
       "ReloadSize": 3,
       "DamageBoat": 100,
       "DamageCar": 100,
       "ReloadTime": 5,
+      "DelayShoot": 1.5,
       "TypeGunn": "GunPTRK"
     }
   ]

@@ -1,0 +1,174 @@
+fileFormatVersion: 2
+guid: 173b00e1d3446e143bc2cf6308cbb436
+timeCreated: 1502367385
+licenseType: Free
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: d1_low
+    100002: hull
+    100004: l1_low
+    100006: //RootNode
+    100008: lpart1
+    100010: lpart2
+    100012: lpart3
+    100014: lpart4
+    100016: part1
+    100018: part2
+    100020: part3
+    100022: part4
+    100024: rotation_horizontal_groop
+    100026: rotation_horizontal_groop 1
+    100028: weapon_1
+    100030: weapon_2
+    100032: weapon_groop
+    100034: weaponpart1
+    100036: weaponpart1 1
+    100038: weaponpart2
+    100040: weaponpart2 1
+    100042: weaponpart3
+    100044: weaponpart3 1
+    400000: d1_low
+    400002: hull
+    400004: l1_low
+    400006: //RootNode
+    400008: lpart1
+    400010: lpart2
+    400012: lpart3
+    400014: lpart4
+    400016: part1
+    400018: part2
+    400020: part3
+    400022: part4
+    400024: rotation_horizontal_groop
+    400026: rotation_horizontal_groop 1
+    400028: weapon_1
+    400030: weapon_2
+    400032: weapon_groop
+    400034: weaponpart1
+    400036: weaponpart1 1
+    400038: weaponpart2
+    400040: weaponpart2 1
+    400042: weaponpart3
+    400044: weaponpart3 1
+    2300000: d1_low
+    2300002: lpart1
+    2300004: lpart2
+    2300006: lpart3
+    2300008: lpart4
+    2300010: part1
+    2300012: part2
+    2300014: part3
+    2300016: part4
+    2300018: weaponpart1
+    2300020: weaponpart1 1
+    2300022: weaponpart2
+    2300024: weaponpart2 1
+    2300026: weaponpart3
+    2300028: weaponpart3 1
+    3300000: d1_low
+    3300002: lpart1
+    3300004: lpart2
+    3300006: lpart3
+    3300008: lpart4
+    3300010: part1
+    3300012: part2
+    3300014: part3
+    3300016: part4
+    3300018: weaponpart1
+    3300020: weaponpart1 1
+    3300022: weaponpart2
+    3300024: weaponpart2 1
+    3300026: weaponpart3
+    3300028: weaponpart3 1
+    4300000: lpart1
+    4300002: lpart2
+    4300004: lpart4
+    4300006: lpart3
+    4300008: part1
+    4300010: part2
+    4300012: part4
+    4300014: part3
+    4300016: weaponpart3
+    4300018: weaponpart1
+    4300020: weaponpart2
+    4300022: weaponpart3
+    4300024: weaponpart2
+    4300026: weaponpart1
+    4300028: d1_low
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

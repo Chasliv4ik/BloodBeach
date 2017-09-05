@@ -595,27 +595,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 577382569}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e69fb65a39d46f547a2bd289c96ce5e9, type: 3}
+  m_Script: {fileID: 11500000, guid: b2133d6d896d3c145bc4c1a0df84a83f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_NetworkPort: 7777
   m_ServerBindToIP: 0
   m_ServerBindAddress: 
   m_NetworkAddress: localhost
-  m_DontDestroyOnLoad: 0
+  m_DontDestroyOnLoad: 1
   m_RunInBackground: 1
   m_ScriptCRCCheck: 1
   m_MaxDelay: 0.01
   m_LogLevel: 2
-  m_PlayerPrefab: {fileID: 1912545288540778, guid: a876e2d2a4a34294ba189991b6265b5d,
-    type: 2}
+  m_PlayerPrefab: {fileID: 0}
   m_AutoCreatePlayer: 1
-  m_PlayerSpawnMethod: 1
-  m_OfflineScene: Main Menu Screen
-  m_OnlineScene: Game Screen
-  m_SpawnPrefabs:
-  - {fileID: 1119547921723580, guid: 9454279f9f3eeb74fa4a280c6e9364dc, type: 2}
-  - {fileID: 1482133173169550, guid: 5cdba997bc66d964c90ada6f69f546f4, type: 2}
+  m_PlayerSpawnMethod: 0
+  m_OfflineScene: 
+  m_OnlineScene: 
+  m_SpawnPrefabs: []
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -727,7 +724,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 731073415}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c5a7b87741fb7a42a40e52672b73259, type: 3}
+  m_Script: {fileID: 11500000, guid: eb77d45936068d34380846c98760d125, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SserverUrl: 
@@ -847,12 +844,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bcdd983ec130cf4bb691abb370c3ef3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bulletPrefab: {fileID: 1119547921723580, guid: 9454279f9f3eeb74fa4a280c6e9364dc,
-    type: 2}
+  _bulletPrefab: {fileID: 0}
   _boatPrefab: {fileID: 1844986561019264, guid: 38596e4558a56bc4eac81708dfd7e7aa,
     type: 2}
   _carPrefab: {fileID: 1867064021830384, guid: 374982c2fb9035c4085cb400681ad172, type: 2}
-  _explosion: {fileID: 1482133173169550, guid: 5cdba997bc66d964c90ada6f69f546f4, type: 2}
+  _explosion: {fileID: 0}
 --- !u!114 &994971856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -932,7 +928,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

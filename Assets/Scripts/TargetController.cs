@@ -7,4 +7,6 @@ public class TargetController : MonoBehaviour
 
     public bool IsEmpty = true;
 
+    public int CountEnemy;
+
 }

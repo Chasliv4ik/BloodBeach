@@ -61,7 +61,7 @@ public class GameControllerOffline : MonoBehaviour
         Camera mCamera = Camera.main;
         if (mCamera.fieldOfView == 60)
         {
-            mCamera.fieldOfView = 30;
+            mCamera.fieldOfView = 25;
         }
         else
             mCamera.fieldOfView = 60;
