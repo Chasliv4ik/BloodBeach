@@ -12,6 +12,7 @@ public class MenuController : MonoBehaviour
     [SerializeField] public Button ButtonJoin;
     [SerializeField] public Text MultiplayerStatus;
 
+    private AsyncOperation _loadAsyncOperation;
     private void Start()
     {
         Instance = this;
@@ -20,8 +21,16 @@ public class MenuController : MonoBehaviour
 
 	public void LoadScene(string sceneName)
     {
-        SceneManager.LoadScene(sceneName);
+        _loadAsyncOperation = SceneManager.LoadSceneAsync(sceneName);
+       
     }
+
+    void Update() 
+    {
+        if(_loadAsyncOperation !=null)
+        MultiplayerStatus.text = (_loadAsyncOperation.progress*100f).ToString();
+    }
+    
 
     public void SetStatus(string statusMessage)
     {

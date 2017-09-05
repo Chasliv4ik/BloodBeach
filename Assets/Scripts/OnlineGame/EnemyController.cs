@@ -21,10 +21,6 @@ public class EnemyController : Enemy
         Health = shipInfo.Health;
         Damage = shipInfo.Damage;
         Speed = shipInfo.Speed;
-
-        //Health = 100;
-        //Damage = 5;
-        //Speed = Random.Range(20, 40);
         _carTargets = GameObject.FindGameObjectsWithTag(Tags.SpawnTag);
         TargetPlayer = UnityEngine.Camera.main.gameObject;
     }

@@ -896,6 +896,8 @@ MonoBehaviour:
   Damage: 0
   DamageFinish: 0
   Health: 100
+  DestroyExplosion: {fileID: 1482133173169550, guid: 93848583ad5ecdf46a281992b1e0f895,
+    type: 2}
   TargetPosition: {fileID: 0}
   BulletPrefab: {fileID: 1119547921723580, guid: f24c197246860e44c8c3c3a2dc3e6b9c,
     type: 2}

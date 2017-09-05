@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2d7e9fa060638be4fb2e5c676e777478
+guid: 37348925602b34b4aac883f846d03e56
 timeCreated: 1496845028
 licenseType: Pro
 VideoClipImporter:
@@ -68,7 +68,7 @@ VideoClipImporter:
     encodedStartFrame: 0
     encodedEndFrame: 150
     streamedResource:
-      source: library/metadata/2d/2d7e9fa060638be4fb2e5c676e777478.resource
+      source: library/metadata/37/37348925602b34b4aac883f846d03e56.resource
       offset: 0
       size: 548150
   userData: 

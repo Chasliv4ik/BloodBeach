@@ -56,13 +56,11 @@ namespace UnityStandardAssets.Cameras
             xAngle = Mathf.Clamp(xAngle, -m_RotationRange.x*0.5f, m_RotationRange.x*0.5f);
             var targetAngles = new Vector3(m_FollowAngles.x + Mathf.DeltaAngle(m_FollowAngles.x, xAngle),
                 m_FollowAngles.y + Mathf.DeltaAngle(m_FollowAngles.y, yAngle));
-
             // smoothly interpolate the current angles to the target angles
             m_FollowAngles = Vector3.SmoothDamp(m_FollowAngles, targetAngles, ref m_FollowVelocity, m_FollowSpeed);
-
-
             // and update the gameobject itself
             transform.localRotation = m_OriginalRotation*Quaternion.Euler(-m_FollowAngles.x, m_FollowAngles.y, 0);
+           transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,transform.localEulerAngles.y,0);
         }
 
     }

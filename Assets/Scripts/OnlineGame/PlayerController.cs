@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using UnityStandardAssets.Cameras;
+
 
 public class PlayerController : NetworkBehaviour {
 
@@ -183,7 +183,7 @@ public class PlayerController : NetworkBehaviour {
     #region OldControll
     private float CalculateAngle(Vector3 temp)
     {
-        dir = new Vector3(temp.x, temp.y, temp.z) - CurrentGun.Camera.transform.position;
+        dir = new Vector3(temp.x, temp.y, temp.z) - CurrentGun.CameraRotatorGroup.transform.position;
         return Vector3.Angle(dir, transform.forward);
     }
 
@@ -191,11 +191,11 @@ public class PlayerController : NetworkBehaviour {
     {
         if (CalculateAngle(target) > 0.1f)
         {
-            CurrentGun.Camera.transform.rotation = Quaternion.RotateTowards(CurrentGun.Camera.transform.rotation,
+            CurrentGun.CameraRotatorGroup.transform.rotation = Quaternion.RotateTowards(CurrentGun.CameraRotatorGroup.transform.rotation,
                 Quaternion.LookRotation(dir), rotationSpeed * Time.deltaTime);
-            var tmpy = GetRangeHorizontal(CurrentGun.Camera.transform.localEulerAngles.y);
-            var tmpx = GetRangeVertical(CurrentGun.Camera.transform.localEulerAngles.x);
-            CurrentGun.Camera.transform.localEulerAngles = new Vector3(tmpx, tmpy, 0);
+            var tmpy = GetRangeHorizontal(CurrentGun.CameraRotatorGroup.transform.localEulerAngles.y);
+            var tmpx = GetRangeVertical(CurrentGun.CameraRotatorGroup.transform.localEulerAngles.x);
+            CurrentGun.CameraRotatorGroup.transform.localEulerAngles = new Vector3(tmpx, tmpy, 0);
         }
     }
 
@@ -300,7 +300,7 @@ public class PlayerController : NetworkBehaviour {
             else
             {
                 isFire = false;
-                StartCoroutine(ReloadGun());
+         
             }
         }
     }
@@ -364,21 +364,15 @@ public class PlayerController : NetworkBehaviour {
         GameScreen.Instance.StartGame();
     }
 
-    IEnumerator ReloadGun()
-    {
-        yield return new WaitForSeconds(CurrentGun.Guns.ReloadTime);
-        CurrentGun.Guns.SetDefaultReloadSize();
-        //ViewInfoAboutGun(CurrentGun.Guns);
-        isFire = true;
-    }
+   
 
     public void SetTypeGun(int type)
     {
         //Camera.main.transform.SetParent(transform);
-        Quaternion tmpCamera = CurrentGun.Camera.transform.rotation;
+        Quaternion tmpCamera = CurrentGun.CameraRotatorGroup.transform.rotation;
         CurrentGun.gameObject.SetActive(false); 
         CurrentGun = Guns.Find(gun => gun.GunType == ((GunsType.TypeGun) type));
-        CurrentGun.Camera.transform.rotation = tmpCamera;
+        CurrentGun.CameraRotatorGroup.transform.rotation = tmpCamera;
         CurrentGun.gameObject.SetActive(true);
         Camera.main.transform.position = CurrentGun.MainCameraTransform.position;
         Camera.main.transform.SetParent(CurrentGun.MainCameraTransform);
